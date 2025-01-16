@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Form</title>
+</head>
+<body>
+    <h1>Employee Form</h1>
+    <form id="employeeForm">
+        <label>
+            Full Name:
+            <input type="text" id="fullName" required>
+        </label><br><br>
+
+        <label>Gender:</label>
+        <label><input type="radio" name="gender" value="Male" required> Male</label>
+        <label><input type="radio" name="gender" value="Female"> Female</label>
+        <label><input type="radio" name="gender" value="Other"> Other</label><br><br>
+
+        <label>
+            Profile Picture:
+            <input type="file" id="profilePicture" accept="image/*" required>
+        </label><br><br>
+
+        <label>
+            Department:
+            <select id="department" required>
+                <option value="">Select</option>
+                <option value="HR">HR</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+            </select>
+        </label><br><br>
+
+        <label>Skills:</label>
+        <label><input type="checkbox" name="skills" value="JavaScript"> JavaScript</label>
+        <label><input type="checkbox" name="skills" value="Python"> Python</label>
+        <label><input type="checkbox" name="skills" value="Java"> Java</label>
+        <label><input type="checkbox" name="skills" value="C#"> C#</label><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Submitted Information:</h2>
+    <p>Full Name: <span id="displayFullName"></span></p>
+    <p>Gender: <span id="displayGender"></span></p>
+    <p>Profile Picture: <span id="displayProfilePicture"></span></p>
+    <p>Department: <span id="displayDepartment"></span></p>
+    <p>Skills: <span id="displaySkills"></span></p>
+
+    <script>
+        document.getElementById('employeeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Retrieve form values
+            const fullName = document.getElementById('fullName').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const department = document.getElementById('department').value;
+
+            const skills = Array.from(document.querySelectorAll('input[name="skills"]:checked'))
+                                .map(skill => skill.value);
+
+            // Update displayed information
+            document.getElementById('displayFullName').textContent = fullName;
+            document.getElementById('displayGender').textContent = gender;
+            document.getElementById('displayDepartment').textContent = department;
+            document.getElementById('displaySkills').textContent = skills.join(', ');
+
+            // Display uploaded profile picture
+            const fileInput = document.getElementById('profilePicture');
+            const displayPicture = document.getElementById('displayProfilePicture');
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    displayPicture.innerHTML = `<img src="${e.target.result}" alt="Profile Picture" style="max-width: 100px;">`;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                displayPicture.textContent = 'No picture uploaded';
+            }
+        });
+    </script>
+</body>
+</html>
